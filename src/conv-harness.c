@@ -43,14 +43,13 @@
 #include <stdint.h>
 
 #include "conv-openmp.h"
+#include "conv-pthread.h"
 
-/* the following two definitions of DEBUGGING control whether or not
-   debugging information is written out. To put the program into
-   debugging mode, uncomment the following line: */
-/*#define DEBUGGING(_x) _x */
-/* to stop the printing of debugging information, use the following line: */
+#ifdef DEBUG
+#define DEBUGGING(_x) _x
+#else
 #define DEBUGGING(_x)
-
+#endif
 
 /* write 3d matrix to stdout */
 void write_out(int16_t *** a, int dim0, int dim1, int dim2)
@@ -68,6 +67,24 @@ void write_out(int16_t *** a, int dim0, int dim1, int dim2)
     }
   }
 }
+
+/* write 3d matrix to stdout */
+void write_out_float(float *** a, int dim0, int dim1, int dim2)
+{
+  int i, j, k;
+
+  for ( i = 0; i < dim0; i++ ) {
+    printf("Outer dimension number %d\n", i);
+    for ( j = 0; j < dim1; j++ ) {
+      for ( k = 0; k < dim2 - 1; k++ ) {
+        printf("%.2f, ", a[i][j][k]);
+      }
+      // print end of line
+      printf("%.2f\n", a[i][j][dim2-1]);
+    }
+  }
+}
+
 
 
 /* create new empty 4d float matrix */
@@ -409,7 +426,7 @@ int main(int argc, char ** argv)
     (stop_time.tv_usec - start_time.tv_usec);
   printf("Student pthreads conv time: %lld microseconds\n", mul_time);
 
-  DEBUGGING(write_out(output, nkernels, width, height));
+  DEBUGGING(write_out_float(output, nkernels, width, height));
 
   /* now check that the student's multichannel convolution routine
      gives the same answer as the known working version */
