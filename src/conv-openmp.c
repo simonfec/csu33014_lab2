@@ -11,6 +11,6 @@ void student_conv_openmp(float *** image, int16_t **** kernels, float *** output
 {
   // this call here is just dummy code that calls the slow, simple, correct version.
   // insert your own code instead
-  multichannel_conv(image, kernels, output, width,
-                    height, nchannels, nkernels, kernel_order);
+  //multichannel_conv(image, kernels, output, width,
+  //                  height, nchannels, nkernels, kernel_order);
 }
