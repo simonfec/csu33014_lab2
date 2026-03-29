@@ -1,8 +1,16 @@
 #include <pthread.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 typedef struct TPoolArgs {
-
+    int m;
+    int w;
+    int h;
+    int nchannels;
+    int kernel_order;
+    float*** image;
+    int16_t**** kernels;
+    float* output;
 } TPoolArgs;
 
 typedef void (*TPoolWorkFunc)(TPoolArgs);

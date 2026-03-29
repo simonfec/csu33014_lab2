@@ -11,6 +11,7 @@ WorkStack* workstack_alloc(unsigned int stack_size) {
     pthread_cond_init(&stack->work_popped, NULL);
     pthread_cond_init(&stack->work_pushed, NULL);
     if (stack->stack == NULL) return NULL;
+    return stack;
 }
 
 void workstack_dealloc(WorkStack* stack) {
@@ -59,7 +60,7 @@ bool workstack_pop(WorkStack* stack, TPoolWork* work_out) {
 
 void workstack_no_more_work(WorkStack* stack) {
     pthread_mutex_lock(&stack->stack_lock);
-    stack->no_more_work;
+    stack->no_more_work = true;
     // Signal to all workers to wake up so they realise no more work's coming
     // all workers that are already running will realise there's no more work when
     // they try to wait for more work next
