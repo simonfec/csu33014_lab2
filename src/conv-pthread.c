@@ -1,3 +1,7 @@
+// Authors
+// - Colin Simon-Fellowes
+// - Alex Robertson
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
