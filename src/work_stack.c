@@ -61,8 +61,8 @@ bool workstack_pop(WorkStack* stack, TPoolWork* work_out) {
 void workstack_no_more_work(WorkStack* stack) {
     pthread_mutex_lock(&stack->stack_lock);
     stack->no_more_work = true;
-    // Signal to all workers to wake up so they realise no more work's coming
-    // all workers that are already running will realise there's no more work when
+    // Signal to all sleeping workers to wake up so they realise no more work's coming.
+    // All workers that are already running will realise there's no more work when
     // they try to wait for more work next
     pthread_cond_broadcast(&stack->work_pushed);
     pthread_mutex_unlock(&stack->stack_lock);
