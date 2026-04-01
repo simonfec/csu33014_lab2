@@ -6,13 +6,10 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdint.h>
+#include <unistd.h>
 #include "threadpool.h"
 
-// Assuming matching threads to hardware threads is optimal
-// 4 processors with 8 cores each with 2 hardware threads per core = 64 hardware threads
-const uint32_t NUM_THREADS = 20;
-
-const unsigned int WORK_BUF_SIZE = 128;
+const unsigned int WORK_BUF_SIZE = 256;
 
 void perform_inner(TPoolArgs args) {
   for (int h = 0; h < args.height; h++) {
@@ -35,9 +32,9 @@ void student_conv_pthreads(float *** image, int16_t **** kernels, float *** outp
                int width, int height, int nchannels, int nkernels,
                int kernel_order)
 {
-  Threadpool* pool = threadpool_alloc(NUM_THREADS, WORK_BUF_SIZE);
-
-  int h, w, m;
+  int hw_threads = sysconf(_SC_NPROCESSORS_ONLN);
+  Threadpool* pool = threadpool_alloc(hw_threads, WORK_BUF_SIZE);
+  int w, m;
 
   for ( m = 0; m < nkernels; m++ ) {
     for ( w = 0; w < width; w++ ) {
