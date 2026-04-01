@@ -9,14 +9,18 @@ void* worker_routine(void* args);
 Threadpool* threadpool_alloc(unsigned int nthreads, unsigned int work_buf_size) {
     assert(nthreads > 0);
     assert(work_buf_size > 0);
+
     Threadpool* pool = malloc(sizeof(Threadpool));
     if (pool == NULL) return NULL;
+
     pool->nworkers = nthreads;
+
     pool->workers = malloc(nthreads * sizeof(pthread_t));
     if (pool->workers == NULL) {
         threadpool_dealloc(pool);
         return NULL;
     }
+
     pool->work_stack = workstack_alloc(work_buf_size);
     if (pool->work_stack == NULL) {
         threadpool_dealloc(pool);
@@ -50,10 +54,14 @@ void threadpool_schedule(Threadpool* pool, TPoolWork work) {
 }
 
 void threadpool_join(Threadpool* pool) {
+    // Join and dealloc threadpool at the same time to avoid inconsistent state where the pool is technically alive
+    // but the workers are joined.
+
     // Signal no more work coming then join all threads
     workstack_no_more_work(pool->work_stack);
     for (int i = 0; i < pool->nworkers; i++)
         pthread_join(pool->workers[i], NULL);
+    threadpool_dealloc(pool);
 }
 
 void* worker_routine(void* args) {

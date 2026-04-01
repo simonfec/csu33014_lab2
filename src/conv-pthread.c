@@ -59,5 +59,4 @@ void student_conv_pthreads(float *** image, int16_t **** kernels, float *** outp
   }
 
   threadpool_join(pool);
-  threadpool_dealloc(pool);
 }
