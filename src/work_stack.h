@@ -5,7 +5,7 @@
 typedef struct TPoolArgs {
     int m;
     int w;
-    int h;
+    int height;
     int nchannels;
     int kernel_order;
     float*** image;

@@ -5,7 +5,7 @@ WorkStack* workstack_alloc(unsigned int stack_size) {
     WorkStack* stack = malloc(sizeof(WorkStack));
     if (stack == NULL) return NULL;
     stack->stack_size = stack_size;
-    stack->stack = malloc(stack_size * sizeof(TPoolWorkFunc));
+    stack->stack = malloc(stack_size * sizeof(TPoolWork));
     stack->stack_next = 0;
     pthread_mutex_init(&stack->stack_lock, NULL);
     pthread_cond_init(&stack->work_popped, NULL);
