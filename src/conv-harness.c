@@ -354,7 +354,6 @@ int main(int argc, char ** argv)
   float *** image;
   int16_t **** kernels;
   float *** control_output, *** output;
-  long long mul_time;
   int width, height, kernel_order, nchannels, nkernels;
   struct timeval start_time;
   struct timeval stop_time;
@@ -399,9 +398,9 @@ int main(int argc, char ** argv)
 
   /* record finishing time */
   gettimeofday(&stop_time, NULL);
-  mul_time = (stop_time.tv_sec - start_time.tv_sec) * 1000000L +
+  long long single_thread_time = (stop_time.tv_sec - start_time.tv_sec) * 1000000L +
     (stop_time.tv_usec - start_time.tv_usec);
-  printf("Single threaded conv time: %lld microseconds\n", mul_time);
+  printf("Single threaded conv time: %lld microseconds\n", single_thread_time);
 
   /* record starting time of student's pthreads code*/
   gettimeofday(&start_time, NULL);
@@ -412,9 +411,9 @@ int main(int argc, char ** argv)
 
   /* record finishing time */
   gettimeofday(&stop_time, NULL);
-  mul_time = (stop_time.tv_sec - start_time.tv_sec) * 1000000L +
+  long long pthreads_time = (stop_time.tv_sec - start_time.tv_sec) * 1000000L +
     (stop_time.tv_usec - start_time.tv_usec);
-  printf("Student pthreads conv time: %lld microseconds\n", mul_time);
+  printf("Student pthreads conv time: %lld microseconds. %.1f%% of single thread time.\n", pthreads_time, 100 * (double)pthreads_time / single_thread_time);
 
   /* now check that the student's multichannel convolution routine
      gives the same answer as the known working version */
@@ -431,9 +430,9 @@ int main(int argc, char ** argv)
 
   /* record finishing time */
   gettimeofday(&stop_time, NULL);
-  mul_time = (stop_time.tv_sec - start_time.tv_sec) * 1000000L +
+  long long openmp_time = (stop_time.tv_sec - start_time.tv_sec) * 1000000L +
     (stop_time.tv_usec - start_time.tv_usec);
-  printf("Student openmp conv time: %lld microseconds\n", mul_time);
+  printf("Student openmp conv time: %lld microseconds. %.1f%% of single thread time, %.1f%% of pthreads time.\n", openmp_time, 100 * (double)openmp_time / single_thread_time, 100 * (double)openmp_time / pthreads_time);
 
   DEBUGGING(write_out_float(output, nkernels, width, height));
 
