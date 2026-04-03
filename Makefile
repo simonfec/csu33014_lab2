@@ -1,10 +1,13 @@
-release: src/conv-harness.c src/conv-openmp.c src/conv-openmp.h src/conv-pthread.c src/conv-pthread.h
-	@mkdir -p bin
-	gcc -O3 -DNDEBUG -msse4 -lpthread -fopenmp -Wall src/conv-harness.c src/conv-openmp.c src/conv-pthread.c -o bin/conv
+SOURCES := $(wildcard src/*.c)
+HEADERS := $(wildcard src/*.h)
 
-debug: src/conv-harness.c src/conv-openmp.c src/conv-openmp.h src/conv-pthread.c src/conv-pthread.h
+release: $(SOURCES) $(HEADERS)
 	@mkdir -p bin
-	gcc -O0 -g -DDEBUG -msse4 -lpthread -fopenmp -Wall src/conv-harness.c src/conv-openmp.c src/conv-pthread.c -o bin/conv
+	gcc -O3 -msse4 -lpthread -fopenmp -Wall $(SOURCES) -o bin/conv
+
+debug: $(SOURCES) $(HEADERS)
+	@mkdir -p bin
+	gcc -O0 -g -DDEBUG -msse4 -lpthread -fopenmp -Wall $(SOURCES) -o bin/conv
 
 clean:
 	@rm -rf bin
