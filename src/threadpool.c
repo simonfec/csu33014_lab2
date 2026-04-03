@@ -6,6 +6,14 @@
 
 void* worker_routine(void* args);
 
+void threadpool_dealloc(Threadpool* pool) {
+    if (pool != NULL) {
+        free(pool->workers);
+        workstack_dealloc(pool->work_stack);
+    }
+    free(pool);
+}
+
 Threadpool* threadpool_alloc(unsigned int nthreads, unsigned int work_buf_size) {
     assert(nthreads > 0);
     assert(work_buf_size > 0);
@@ -39,14 +47,6 @@ Threadpool* threadpool_alloc(unsigned int nthreads, unsigned int work_buf_size) 
         pool->workers[i] = thread;
     }
     return pool;
-}
-
-void threadpool_dealloc(Threadpool* pool) {
-    if (pool != NULL) {
-        free(pool->workers);
-        workstack_dealloc(pool->work_stack);
-    }
-    free(pool);
 }
 
 void threadpool_schedule(Threadpool* pool, TPoolWork work) {
