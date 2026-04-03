@@ -15,8 +15,7 @@ const unsigned int WORK_BUF_SIZE = 256;
 void perform_inner(TPoolArgs args) {
   for (int h = 0; h < args.height; h++) {
 
-    const double zero = 0;
-    __m128d sums = _mm_load1_pd(&zero);
+    __m128d sums = _mm_setzero_pd();
     for (int c = 0; c < args.nchannels; c += 2 ) {
       for (int x = 0; x < args.kernel_order; x++) {
         for (int y = 0; y < args.kernel_order; y++ ) {
@@ -47,7 +46,6 @@ void student_conv_pthreads(float *** image, int16_t **** kernels, float *** outp
   int hw_threads = sysconf(_SC_NPROCESSORS_ONLN);
   Threadpool* pool = threadpool_alloc(hw_threads, WORK_BUF_SIZE);
   int w, m;
-
 
   for ( m = 0; m < nkernels; m++ ) {
     for ( w = 0; w < width; w++ ) {
