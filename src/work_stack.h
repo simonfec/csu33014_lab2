@@ -1,3 +1,7 @@
+// Authors
+// - Colin Simon-Fellowes
+// - Alex Robertson
+
 #include <pthread.h>
 #include <stdbool.h>
 #include <stdint.h>

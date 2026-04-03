@@ -1,3 +1,7 @@
+// Authors
+// - Colin Simon-Fellowes
+// - Alex Robertson
+
 #include <assert.h>
 #include <stdbool.h>
 #include <stdlib.h>

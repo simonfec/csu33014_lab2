@@ -1,3 +1,7 @@
+// Authors
+// - Colin Simon-Fellowes
+// - Alex Robertson
+
 #include <pthread.h>
 #include "work_stack.h"
 

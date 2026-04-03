@@ -1,3 +1,7 @@
+// Authors
+// - Colin Simon-Fellowes
+// - Alex Robertson
+
 #include "work_stack.h"
 #include <stdlib.h>
 
