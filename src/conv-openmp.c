@@ -16,6 +16,14 @@ void student_conv_openmp(float *** image, int16_t **** kernels, float *** output
   int h, w, x, y, c, m;
   double sum;
 
+  // collapse: https://www.openmp.org/spec-html/5.2/openmpsu30.html
+
+  // the outer three loops here are all data-independent, so we can use collapse(3)
+  // to squish them all together (?), basically distributing work across a (m,w,h) 3-tuple
+  // instead of just each m.
+
+  // we end up needing to private sum, c, x and y, since each of these is modified internally
+  // and so sum must be defined above for the pragma to catch it properly
   #pragma omp parallel for collapse(3) private(sum,c,x,y)
   for ( m = 0; m < nkernels; m++ ) {
     for ( w = 0; w < width; w++ ) {
