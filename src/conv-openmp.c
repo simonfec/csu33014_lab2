@@ -13,13 +13,13 @@ void student_conv_openmp(float *** image, int16_t **** kernels, float *** output
                int width, int height, int nchannels, int nkernels,
                int kernel_order)
 {
-  int h, w, x, y, c, m;
+  int h, w, x, y, c, m, sum;
 
   #pragma omp parallel for collapse(3) private(sum,c,x,y)
   for ( m = 0; m < nkernels; m++ ) {
     for ( w = 0; w < width; w++ ) {
       for ( h = 0; h < height; h++ ) {
-        double sum = 0.0;
+        sum = 0.0;
         for ( c = 0; c < nchannels; c++ ) {
           for ( x = 0; x < kernel_order; x++) {
             for ( y = 0; y < kernel_order; y++ ) {
